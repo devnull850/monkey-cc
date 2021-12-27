@@ -1,10 +1,7 @@
 #ifndef UTIL_H
 #define UTIL_H
 
-struct Map {
-    char *key;
-    char *value;
-};
+#include "token.h"
 
 struct ByteStream {
     char *buf;
@@ -13,5 +10,7 @@ struct ByteStream {
 
 struct ByteStream *get_file_stream(char *);
 void free_bytes(struct ByteStream *);
+
+void print_token(struct Token *);
 
 #endif /* UTIL_H */

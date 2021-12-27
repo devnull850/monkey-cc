@@ -57,3 +57,7 @@ void free_bytes(struct ByteStream *bytes) {
     free(bytes->buf);
     free(bytes);
 }
+
+void print_token(struct Token *tok) {
+    printf("{type: %s, literal: %s}\n", tok->type, tok->literal);
+}

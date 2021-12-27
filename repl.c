@@ -1,26 +1,31 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 #include "lexer.h"
 #include "repl.h"
-#include "token.h"
 #include "util.h"
 
-int main(int argc, char *argv[]) {
-    struct ByteStream *bytes;
+#define LEN 0x100
+
+const char QUIT[] = "quit";
+
+void repl_loop(void) {
+    char buf[LEN];
     struct Lexer *lex;
     struct Token *tok;
 
-    if (argc == 1) {
-        repl_loop();
-        return EXIT_SUCCESS;
-    }
+    puts("Welcome to the Monkey programming language");
+    puts("Feel free to enter commands");
 
-    for (int i = 1; i < argc; ++i) {
-        bytes = get_file_stream(argv[i]);
-        lex = new_lexer(bytes->buf);
-        free_bytes(bytes);
+    while (1) {
+        printf(">> ");
+        fgets(buf, LEN-1, stdin);
+
+        if (!strncmp(buf, QUIT, strlen(QUIT))) {
+            break;
+        }
+
+        lex = new_lexer(buf);
 
         for (tok = next_token(lex);
                 strncmp(tok->type, END_OF_FILE, strlen(END_OF_FILE));

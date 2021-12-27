@@ -1,13 +1,12 @@
 #ifndef TOKEN_H
 #define TOKEN_H
 
-#include "util.h"
-
 extern const char ILLEGAL[];
 extern const char END_OF_FILE[];
 
 extern const char IDENT[];
 extern const char INT[];
+extern const char STRING[];
 
 extern const char ASSIGN[];
 extern const char PLUS[];
@@ -36,6 +35,11 @@ extern const char FALSE[];
 extern const char IF[];
 extern const char ELSE[];
 extern const char RETURN[];
+
+struct Map {
+    char *key;
+    char *value;
+};
 
 extern const struct Map keywords[];
 

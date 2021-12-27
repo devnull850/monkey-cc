@@ -9,6 +9,7 @@ const char END_OF_FILE[] = "EOF";
 
 const char IDENT[] = "IDENT";
 const char INT[] = "INT";
+const char STRING[] = "STRING";
 
 const char ASSIGN[] = "=";
 const char PLUS[] = "+";
@@ -37,7 +38,6 @@ const char FALSE[] = "FALSE";
 const char IF[] = "IF";
 const char ELSE[] = "ELSE";
 const char RETURN[] = "RETURN";
-
 
 const struct Map keywords[] = {
     {.key = "fn", .value = "FUNCTIONS"},

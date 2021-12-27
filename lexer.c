@@ -92,6 +92,41 @@ static char peek_char(struct Lexer *this) {
     return this->read_position < strlen(this->input) ? this->input[this->read_position] : 0;
 }
 
+static int is_quotation(char ch) {
+    return ch == '"';
+}
+
+static struct Token *read_string(struct Lexer *this) {
+    size_t pos, len;
+    char *s;
+    struct Token *tok;
+
+    pos = this->position;
+    read_char(this);
+
+    while (!is_quotation(this->ch)) {
+        read_char(this);
+    }
+
+    read_char(this); // capture last '"'
+
+    len = this->position - pos;
+
+    if ((s = malloc(len+1)) == NULL) {
+        fprintf(stderr, "malloc failed [read_string]\n");
+        exit(EXIT_FAILURE);
+    }
+
+    strncpy(s, this->input + pos, len);
+    s[len] = 0;
+
+    tok = new_token(STRING, s);
+
+    free(s);
+
+    return tok;
+}
+
 struct Lexer *new_lexer(char *input) {
     struct Lexer *this;
     size_t len;
@@ -231,6 +266,10 @@ struct Token *next_token(struct Lexer *this) {
             }
             else if (isdigit(this->ch)) {
                 tok = read_number(this);
+                return tok;
+            }
+            else if (is_quotation(this->ch)) {
+                tok = read_string(this);
                 return tok;
             }
             else {

@@ -1,7 +1,9 @@
-all: main
+OBJ=main.o lexer.o token.o util.o repl.o
 
-main: main.o lexer.o token.o util.o
-	gcc -Wall -Werror -o main main.o lexer.o token.o util.o
+all: monkey-cc
+
+monkey-cc: $(OBJ)
+	gcc -Wall -Werror -o monkey-cc $(OBJ)
 
 main.o: main.c
 	gcc -c main.c
@@ -15,6 +17,9 @@ token.o: token.c
 util.o: util.c
 	gcc -c util.c
 
+repl.o: repl.c
+	gcc -c repl.c
+
 .PHONY:
 clean:
-	rm main main.o lexer.o token.o util.o
+	rm monkey-cc $(OBJ)

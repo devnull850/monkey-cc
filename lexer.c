@@ -88,6 +88,10 @@ static int is_whitespace(char ch) {
     return ch == ' ' || ch == '\n' || ch == '\t' || ch == '\r';
 }
 
+static char peek_char(struct Lexer *this) {
+    return this->read_position < strlen(this->input) ? this->input[this->read_position] : 0;
+}
+
 struct Lexer *new_lexer(char *input) {
     struct Lexer *this;
     size_t len;
@@ -132,7 +136,69 @@ struct Token *next_token(struct Lexer *this) {
 
     switch (this->ch) {
         case '=':
-            tok = generate_token(ASSIGN, this->ch);
+            if (peek_char(this) == '=') {
+                char ch;
+                char *s;
+
+                ch = this->ch;
+                read_char(this);
+
+                if ((s = malloc(3)) == NULL) {
+                    fprintf(stderr, "malloc failed [next_token, '==']\n");
+                    exit(EXIT_FAILURE);
+                }
+
+                s[0] = ch;
+                s[1] = this->ch;
+                s[2] = 0;
+
+                tok = new_token(EQ, s);
+
+                free(s);
+            }
+            else {
+                tok = generate_token(ASSIGN, this->ch);
+            }
+            break;
+        case '-':
+            tok = generate_token(MINUS, this->ch);
+            break;
+        case '!':
+            if (peek_char(this) == '=') {
+                char ch;
+                char *s;
+
+                ch = this->ch;
+                read_char(this);
+                
+                if ((s = malloc(3)) == NULL) {
+                    fprintf(stderr, "malloc failed [next_token, '!=']\n");
+                    exit(EXIT_FAILURE);
+                }
+
+                s[0] = ch;
+                s[1] = this->ch;
+                s[2] = 0;
+
+                tok = new_token(NOT_EQ, s);
+
+                free(s);
+            }
+            else {
+                tok = generate_token(BANG, this->ch);
+            }
+            break;
+        case '*':
+            tok = generate_token(ASTERISK, this->ch);
+            break;
+        case '/':
+            tok = generate_token(SLASH, this->ch);
+            break;
+        case '<':
+            tok = generate_token(LT, this->ch);
+            break;
+        case '>':
+            tok = generate_token(GT, this->ch);
             break;
         case ';':
             tok = generate_token(SEMICOLON, this->ch);
@@ -150,10 +216,10 @@ struct Token *next_token(struct Lexer *this) {
             tok = generate_token(PLUS, this->ch);
             break;
         case '{':
-            tok = generate_token(RBRACE, this->ch);
+            tok = generate_token(LBRACE, this->ch);
             break;
         case '}':
-            tok = generate_token(LBRACE, this->ch);
+            tok = generate_token(RBRACE, this->ch);
             break;
         case 0:
             tok = new_token(END_OF_FILE, "");

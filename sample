@@ -2,7 +2,27 @@ let five = 5;
 let ten = 10;
 
 let add = fn(x, y) {
-    x + y;
+    return x + y;
 };
+
+let div = fn(x, y) {
+    if (y > 0) {
+        return x / y;
+    }
+
+    return 0;
+}
+
+let sub = fn(x, y) {
+    return x - y;
+}
+
+let multi = fn(x, y) {
+    return x * y;
+}
+
+let not_eq = fn(x, y) {
+    return x != y;
+}
 
 let result = add(five, ten);
